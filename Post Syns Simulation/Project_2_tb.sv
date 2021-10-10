@@ -19,7 +19,7 @@ logic [7:0] pt_mem_in [0:255];
 logic [7:0] pt_mem [0:255];
 logic [7:0] ct_mem_in [0:255];
 logic [7:0] ct_mem [0:255];
-Simpl_inct_mem_iner_Cipher_Decryption tb( clk, reset, next, okay, mode, msg_length_byte, encode_key_shift, key_caesar_shift ,halt, done,  pt_mem_in[255] , pt_mem_in[254] , pt_mem_in[253] ,
+Simpler_Cipher_Decryption tb( clk, reset, next, okay, mode, msg_length_byte, encode_key_shift, key_caesar_shift ,halt, done,  pt_mem_in[255] , pt_mem_in[254] , pt_mem_in[253] ,
      pt_mem_in[252] , pt_mem_in[251] , pt_mem_in[250] ,
      pt_mem_in[249] , pt_mem_in[248] , pt_mem_in[247] ,
      pt_mem_in[246] , pt_mem_in[245] , pt_mem_in[244] ,
@@ -306,7 +306,7 @@ Simpl_inct_mem_iner_Cipher_Decryption tb( clk, reset, next, okay, mode, msg_leng
      ct_mem[13] , ct_mem[12] , ct_mem[11] , ct_mem[10] , ct_mem[9]
      , ct_mem[8] , ct_mem[7] , ct_mem[6] , ct_mem[5] , ct_mem[4] ,
      ct_mem[3] , ct_mem[2] , ct_mem[1] , ct_mem[0] ) ;
-initi_inct_mem_inal forever #1 clk = ! clk;
+initial forever #1 clk = ! clk;
 /*
 THE TESTBECH IS VERY INTUITIVE WHERE THREE SEPARETE TESTS ARE INCLUDED.
 THEY ARE USED TO TEST OUT THE CASESAR CIPHER DECRYPTION, ENCRYPTION 
@@ -323,11 +323,11 @@ TEST 3 EXPECTED RESULT: PT[Matou Sakura is the best girl] WITH KEY 13
 initial begin
     //The quick brown fox jumps over the lazy dog_shift_by 3.memh
     $readmemh("The quick brown fox jumps over the lazy dog_shift_by 3.memh", ct_mem_in);
-    c_inct_mem_inlk =  0; reset = 1;
+    clk =  0; reset = 1;
     next = 0; okay  = 0;
     mode = 1; msg_length_byte = 43; #15;
     reset = 0; #15;
-
+	repeat (2) #15 reset = ! reset;
     repeat(2) #15 okay = ! okay;
     #5000;
 
@@ -340,7 +340,8 @@ initial begin
     #2500;
     $readmemh("blank.memh", ct_mem_in);
     $readmemh("blank.memh", pt_mem_in);
-    #100;$readmemh("The quick brown fox jumps over the lazy dog_original.memh", ct_mem_in);    re_inct_mem_inpeat (2) #15 reset = ! reset; msg_length_byte = 43;
+    #100;$readmemh("The quick brown fox jumps over the lazy dog_original.memh", ct_mem_in);    
+   repeat (2) #15 reset = ! reset; msg_length_byte = 43;
     encode_key_shift = 3; #15 mode = 3;
     repeat(2) #15 okay = ! okay;
     #5000;
@@ -348,7 +349,8 @@ initial begin
 
     $readmemh("blank.memh", ct_mem_in);
     $readmemh("blank.memh", pt_mem_in);
-    #100;$readmemh("ROT13-29.memh", ct_mem_in);    re_inct_mem_inpeat (2) #15 reset = ! reset; 
+    #100;$readmemh("ROT13-29.memh", ct_mem_in);    
+    repeat(2) #15 reset = ! reset; 
      #15 mode = 0;msg_length_byte = 29;
     repeat(2) #15 okay = ! okay;
     #12000;
