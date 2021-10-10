@@ -53,6 +53,9 @@ module Simpler_Cipher_Decryption (
                                         output logic [4:0] key,
                                         output logic halt,done,
 
+                                        input logic [7:0] pt_mem_in [0:255],
+                                        input logic [7:0] ct_mem_in [0:255],
+
                                         output logic [7:0] pt_mem [0:255],
                                         output logic [7:0] ct_mem [0:255]
                                  ) ;
@@ -62,7 +65,7 @@ module Simpler_Cipher_Decryption (
     logic [7:0] CT_address, PT_address;
     logic [7:0] CT_data_in, PT_data_in;
     logic [7:0] CT_q_out, PT_q_out;
-    logic CT_wren, PT_wren;
+    logic CT_wren, PT_wren, CT_reset, PT_reset;
 
     //Input Registers; in case the user unintenionally changes the input during computation 
     logic ROT_13_reg, Encode_reg;
@@ -83,8 +86,8 @@ module Simpler_Cipher_Decryption (
                      ((CT_q_out >8'h60 && CT_q_out <8'h7b) ? { (CT_q_out + key_decode) %8'h7b + Lower_Overflow_flag* 8'h61} : { CT_q_out} );
 
     //Memorry Module Instantiations
-    RAM CT (CT_address, clk, CT_data_in, CT_wren, CT_q_out, ct_mem);
-    RAM  PT (PT_address, clk, PT_data_in, PT_wren, PT_q_out, pt_mem);
+    RAM CT (CT_reset,CT_address, clk, CT_data_in, CT_wren, CT_q_out, ct_mem_in, ct_mem);
+    RAM PT (PT_reset,PT_address, clk, PT_data_in, PT_wren, PT_q_out, pt_mem_in, pt_mem);
 
     //Internal helper signals
     logic [3:0] state, accumulator;
@@ -107,8 +110,8 @@ module Simpler_Cipher_Decryption (
 // Finite State Machine 
     always_ff @( posedge clk ) begin 
         if (reset == 1) // Synchronous Reset; Set Important SIgnals to a known value
-            {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, state, halt, done,ROT_13_reg, Encode_reg, input_key_reg, accumulator} 
-                <= {5'b0, 16'b0, 16'b0, 2'b0, `Reset, 2'b0, 2'b0, 5'b0, 4'b0};
+            {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, state, halt, done,ROT_13_reg, Encode_reg, input_key_reg, CT_reset, PT_reset} 
+                <= {5'b0, 16'b0, 16'b0, 2'b0, `Reset, 2'b0, 2'b0, 5'b0, 2'b11};
         else 
             casex (state) // State Transition
                  `Reset:        state <= `Select_Mode;
@@ -116,7 +119,7 @@ module Simpler_Cipher_Decryption (
                   4'b10x1:      state <= `Mem_Read; //4'b10x1 includes ROT_13 and Encode states
                  `Mem_Read:     state <= `Mem_Wait;
                  `Mem_Wait:     state <= `Wait;
-                 `Wait:         state <= (accumulator > 4'd5) ? ((Encode_reg) ? `CT_Write: `PT_Write) : `Wait ;
+                 `Wait:         state <= ((Encode_reg) ? `CT_Write: `PT_Write) ;
                  `PT_Write:     state <= `Decode_Inc;
                  `CT_Write:     state <= `Encode_Inc;
                   4'b01x1  :    state <= (CT_address === msg_length_byte -1'b1) ? `Halt: `Mem_Read;//4'b01x1 include Decode_Inc and Encode_Inc
@@ -173,7 +176,7 @@ module Simpler_Cipher_Decryption (
             endcase
 
         casex(state)
-            `Reset:         {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, halt, done}  <= {0};
+            `Reset:         {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, halt, done,CT_reset, PT_reset}  <= {0};
             `Select_Mode:   {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, halt, done, ROT_13_reg, Encode_reg}  <= {0};
 
             `ROT_13:         {key_decode, ROT_13_reg} <= {5'd13, 1'b1};
@@ -196,8 +199,8 @@ module Simpler_Cipher_Decryption (
             `Halt:           {halt, PT_wren, CT_wren,accumulator} <= {1'b1, 2'b0, 4'b0};
             `End:            {done, halt, PT_wren, CT_wren, key} <= (Encode_reg )? {1'b1, 3'b0, encode_key_shift}: {1'b1, 3'b0, (5'd26-(key_decode-1'b1))};
             
-            default:       {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, halt, done} 
-                                <= {5'b0, 16'b0, 16'b0, 2'b0, 2'b0};
+            default:       {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, halt, done,CT_reset, PT_reset} 
+                                <= {5'b0, 16'b0, 16'b0, 2'b0, 2'b0,2'b0};
         endcase 
     end
 

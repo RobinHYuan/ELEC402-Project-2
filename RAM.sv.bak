@@ -1,9 +1,8 @@
-module RAM(reset, address, clock,data,wren,q, mem_in, mem_out);
+module RAM(address, clock,data,wren,q, mem_in, mem_out);
   parameter data_width = 8; 
   parameter addr_width = 8;
   //parameter filename = "data.txt";
 
-  input reset;
   input clock;
   input [addr_width-1:0] address;
   input wren;
@@ -12,12 +11,11 @@ module RAM(reset, address, clock,data,wren,q, mem_in, mem_out);
   input logic [data_width-1:0] mem_in [0: 2**addr_width-1];
   output logic [data_width-1:0] mem_out [0: 2**addr_width-1];
 
-
+  always_comb mem_out[0: 2**addr_width-1] = mem_in[[0: 2**addr_width-1];
 
   always @ (posedge clock) begin
-    if (reset) mem_out[0: 2**addr_width-1] = mem_in[0: 2**addr_width-1];
-    else if (wren) mem_out[address] <= data;
-          else q <= mem_out[address]; // q doesn't get data in this clock cycle 
+    if (wren) mem_in[address] <= data;
+    else q <= mem_in[address]; // q doesn't get data in this clock cycle 
                                // (this is due to Verilog non-blocking assignment "<=")
   end 
 endmodule

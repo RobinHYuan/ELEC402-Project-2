@@ -15,9 +15,11 @@ logic [7:0] msg_length_byte;
   
 logic [4:0] key_caesar_shift, encode_key_shift;
 logic halt, done;
-logic [7:0] pt_mem [0:255];
+logic [7:0] pt_mem_in [0:255];
 logic [7:0] ct_mem [0:255];
-Simpler_Cipher_Decryption tb( clk, reset, next, okay, mode, msg_length_byte, encode_key_shift, key_caesar_shift ,halt, done,pt_mem,ct_mem ) ;
+logic [7:0] pt_mem [0:255];
+logic [7:0] ct_mem_in [0:255];
+Simpler_Cipher_Decryption tb( clk, reset, next, okay, mode, msg_length_byte, encode_key_shift, key_caesar_shift ,halt, done,pt_mem_in, ct_mem_in, pt_mem,ct_mem ) ;
 
 initial forever #5 clk = ! clk;
 /*
@@ -35,13 +37,13 @@ TEST 3 EXPECTED RESULT: PT[Matou Sakura is the best girl] WITH KEY 13
 */
 initial begin
     //The quick brown fox jumps over the lazy dog_shift_by 3.memh
-    $readmemh("The quick brown fox jumps over the lazy dog_shift_by 3.memh", tb.CT.mem);
+    $readmemh("The quick brown fox jumps over the lazy dog_shift_by 3.memh", ct_mem_in);
 
     clk =  0; reset = 1;
     next = 0; okay  = 0;
     mode = 1; msg_length_byte = 43; #15;
     reset = 0; #15;
-
+    repeat (2) #15 reset = ! reset;
     repeat(2) #15 okay = ! okay;
     #5000;
 
@@ -52,18 +54,18 @@ initial begin
     repeat(2) #15 okay = ! okay;
 
     #2500;
-    $readmemh("blank.memh", tb.CT.mem);
-    $readmemh("blank.memh", tb.PT.mem);
-    #100;$readmemh("The quick brown fox jumps over the lazy dog_original.memh", tb.PT.mem);
+    $readmemh("blank.memh", ct_mem_in);
+    $readmemh("blank.memh", pt_mem_in);
+    #100;$readmemh("The quick brown fox jumps over the lazy dog_original.memh", pt_mem_in);
     repeat (2) #15 reset = ! reset; msg_length_byte = 43;
     encode_key_shift = 3; #15 mode = 3;
     repeat(2) #15 okay = ! okay;
     #5000;
     repeat(2) #15 okay = ! okay;
 
-    $readmemh("blank.memh", tb.CT.mem);
-    $readmemh("blank.memh", tb.PT.mem);
-    #100;$readmemh("ROT13-29.memh", tb.CT.mem);
+    $readmemh("blank.memh", ct_mem_in);
+    $readmemh("blank.memh", pt_mem_in);
+    #100;$readmemh("ROT13-29.memh", ct_mem_in);
     repeat (2) #15 reset = ! reset; 
      #15 mode = 0;msg_length_byte = 29;
     repeat(2) #15 okay = ! okay;

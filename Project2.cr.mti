@@ -1,15 +1,17 @@
-{C:/Users/circl/OneDrive/Desktop/Project 2/Project_1_tb.sv} {1 {vlog -work work -sv -stats=none {C:/Users/circl/OneDrive/Desktop/Project 2/Project_1_tb.sv}
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module tb_Simpler_Cipher_Decryption
-
-Top level modules:
-	tb_Simpler_Cipher_Decryption
-
-} {} {}} {C:/Users/circl/OneDrive/Desktop/Project 2/RAM.sv} {1 {vlog -work work -sv -stats=none {C:/Users/circl/OneDrive/Desktop/Project 2/RAM.sv}
+{C:/Users/circl/OneDrive/Desktop/Project 2/RAM.sv} {1 {vlog -work work -sv -stats=none {C:/Users/circl/OneDrive/Desktop/Project 2/RAM.sv}
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
 -- Compiling module RAM
 
 Top level modules:
 	RAM
+
+} {} {}} {C:/Users/circl/OneDrive/Desktop/Project 2/Simpler_Cipher_Decryption.sv} {2 {vlog -work work -sv -stats=none {C:/Users/circl/OneDrive/Desktop/Project 2/Simpler_Cipher_Decryption.sv}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module Simpler_Cipher_Decryption
+** Warning: (vlog-2121) C:/Users/circl/OneDrive/Desktop/Project 2/Simpler_Cipher_Decryption.sv(179): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
+** Warning: (vlog-2121) C:/Users/circl/OneDrive/Desktop/Project 2/Simpler_Cipher_Decryption.sv(180): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
+
+Top level modules:
+	Simpler_Cipher_Decryption
 
 } {} {}}
