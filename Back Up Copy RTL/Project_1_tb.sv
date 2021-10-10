@@ -43,11 +43,11 @@ initial begin
     reset = 0; #15;
 
     repeat(2) #15 okay = ! okay;
-    #2500;
+    #5000;
 
     repeat(23) begin
         next = 1; #15; next = 0; 
-        #3000;
+        #5000;
     end 
     repeat(2) #15 okay = ! okay;
 
@@ -58,7 +58,7 @@ initial begin
     repeat (2) #15 reset = ! reset; msg_length_byte = 43;
     encode_key_shift = 3; #15 mode = 3;
     repeat(2) #15 okay = ! okay;
-    #2500;
+    #5000;
     repeat(2) #15 okay = ! okay;
 
     $readmemh("blank.memh", tb.CT.mem);
@@ -67,7 +67,7 @@ initial begin
     repeat (2) #15 reset = ! reset; 
      #15 mode = 0;msg_length_byte = 29;
     repeat(2) #15 okay = ! okay;
-    #1200;
+    #12000;
     repeat(2) #15 okay = ! okay;
     #2500;
     $stop;
