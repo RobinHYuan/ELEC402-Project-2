@@ -1,3 +1,11 @@
+rc:/> source ./in/compile.tcl 
+Sourcing './in/compile.tcl' (Sun Oct 10 16:03:04 -0700 2021)...
+Sourcing '/CMC/tools/cadence/RC14.13.000_lnx86/tools/lib/etc/load_etc.tcl' (Sun Oct 10 16:03:04 -0700 2021)...
+Sourcing '/CMC/tools/cadence/RC14.13.000_lnx86/tools/lib/etc/toolbox/insert_io_buffers.tcl' (Sun Oct 10 16:03:04 -0700 2021)...
+Sourcing '/CMC/tools/cadence/RC14.13.000_lnx86/tools/lib/etc/toolbox/performance_statistics.tcl' (Sun Oct 10 16:03:04 -0700 2021)...
+Sun Oct 10 16:03:04 -0700 2021
+
+
 > Setting up Synthesis Environment . . .
   Setting attribute of root '/': 'lib_search_path' = /ubc/ece/data/cmc2/kits/ncsu_pdk/FreePDK15/NanGate_15nm_OCL_v0.1_2014_06_Apache.A/front_end/timing_power_noise/CCS
 Warning : Found CCS construct in the cell. [LBR-408]
@@ -41,97 +49,6 @@ Info    : Elaborating Design. [ELAB-1]
         : Elaborating top-level block 'Simpler_Cipher_Decryption' from file './in/Simpler_Cipher_Decryption.sv'.
 Warning : Using default parameter value for module elaboration. [CDFG-818]
         : Elaborating block 'RAM' with default parameters value.
-Error   : All assignments within a conditional statement should be either all blocking or all non-blocking. [CDFG-463] [elaborate]
-        : Assignment to 'mem_out[0]' in file './in/RAM.sv' on line 18.
-        : The following example shows an unallowed mix of blocking and non-blocking assignments.
-    if (in)
-        out = data1;
-    else
-        out <= data2;
-Info    : Error in Elaborating Design. [ELAB-4]
-        : Module 'Simpler_Cipher_Decryption' contains errors and cannot be elaborated.
-1
-rc:/> source ./in/compile.tcl 
-Sourcing './in/compile.tcl' (Sun Oct 10 02:23:13 -0700 2021)...
-Sourcing '/CMC/tools/cadence/RC14.13.000_lnx86/tools/lib/etc/load_etc.tcl' (Sun Oct 10 02:23:13 -0700 2021)...
-Sourcing '/CMC/tools/cadence/RC14.13.000_lnx86/tools/lib/etc/toolbox/insert_io_buffers.tcl' (Sun Oct 10 02:23:13 -0700 2021)...
-Sourcing '/CMC/tools/cadence/RC14.13.000_lnx86/tools/lib/etc/toolbox/performance_statistics.tcl' (Sun Oct 10 02:23:13 -0700 2021)...
-Info    : Specified metric name already exists. [STAT-6]
-        : Metric 'Target_leak_power' is already present and will be overwritten.
-Info    : Specified metric name already exists. [STAT-6]
-        : Metric 'Target_dyn_power' is already present and will be overwritten.
-Sun Oct 10 02:23:13 -0700 2021
-
-
-> Setting up Synthesis Environment . . .
-  Setting attribute of root '/': 'lib_search_path' = /ubc/ece/data/cmc2/kits/ncsu_pdk/FreePDK15/NanGate_15nm_OCL_v0.1_2014_06_Apache.A/front_end/timing_power_noise/CCS
-Freeing libraries in memory (NanGate_15nm_OCL_worst_low_conditional_ccs.lib)
-
-Info    : Created nominal operating condition. [LBR-412]
-        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.720000, -40.000000) in library 'NanGate_15nm_OCL_worst_low_conditional_ccs.lib'.
-
-  Message Summary for Library NanGate_15nm_OCL_worst_low_conditional_ccs.lib:
-  ***************************************************************************
-  An unsupported construct was detected in this library. [LBR-40]: 6
-  Found 'statetable' group in cell. [LBR-83]: 1
-  Created nominal operating condition. [LBR-412]: 1
-  ***************************************************************************
- 
-  Setting attribute of root '/': 'library' = NanGate_15nm_OCL_worst_low_conditional_ccs.lib
-module RAM(reset, address, clock,data,wren,q, mem_in, mem_out);
-         |
-Warning : Replacing previously read Verilog description. [VLOGPT-6]
-        : Replacing Verilog description 'RAM' with Verilog module in file './in/RAM.sv' on line 1, column 10.
-        : A Verilog description is replaced when a new description of the same name and same library is read again.
-    Verilog descriptions are:
-       module
-       macromodule
-    SystemVerilog adds the following descriptions:
-       interface
-       program
-       package.
-Warning : Replacing previously read Verilog module or VHDL entity. [HPT-76]
-        : Replacing Verilog module 'RAM' in library 'default' with newly read Verilog module 'RAM' in the same library in file './in/RAM.sv' on line 1.
-        : A newly read VHDL entity replaces any previously read Verilog module or VHDL entity in the same library if its name matches (case-insensitively) the existing module or entity.
-    For instance:
-        VHDL 'foo'                  replaces  VHDL {'FOO' or 'foo' or 'Foo' or ...} in the same library
-        VHDL 'foo' (in any library) replaces  Verilog {'FOO' or 'foo' or 'Foo' or ...} in the same library
- 
-A newly read Verilog module replaces any previously read Verilog module if its name matches (case-sensitively) that module.  Further, it replaces any previously read VHDL entity in the same library if its name matches (case -insensitively) that entity.
-    For instance:
-        Verilog 'foo' replaces    VHDL {'FOO' or 'foo' or 'Foo' or ...} in the same library
-        Verilog 'foo' replaces    Verilog 'foo' only
-    In addition:
-        Verilog 'foo' does not replace Verilog 'FOO' and the two remain as distinct modules.
-module Simpler_Cipher_Decryption (      
-                               |
-Warning : Replacing previously read Verilog description. [VLOGPT-6]
-        : Replacing Verilog description 'Simpler_Cipher_Decryption' with Verilog module in file './in/Simpler_Cipher_Decryption.sv' on line 45, column 32.
-                  4'b01x1  :    state <= (CT_address === msg_length_byte -1'b1) ? `Halt: `Mem_Read;//4'b01x1 include Decode_Inc and Encode_Inc
-                                                     |
-Warning : Using synthesizable equivalent of non-synthesizable operator. [VLOGPT-107]
-        : Converting '===' to '==' in file './in/Simpler_Cipher_Decryption.sv' on line 125, column 54.
-            4'b0101:     {CT_address, PT_address, key_decode, PT_wren} <= (ROT_13_reg && (CT_address !== msg_length_byte-1'b1)) ? {CT_address+8'b1, PT_address+8'b1, key_decode, 1'b0} : 
-                                                                                                         |
-Warning : Using synthesizable equivalent of non-synthesizable operator. [VLOGPT-107]
-        : Converting '!==' to '!=' in file './in/Simpler_Cipher_Decryption.sv' on line 194, column 106.
-                                                                                                   (CT_address === msg_length_byte-1'b1  ) ? {9'b0, 9'b0, key_decode + 5'b1, 1'b0}:
-                                                                                                               |
-Warning : Using synthesizable equivalent of non-synthesizable operator. [VLOGPT-107]
-        : Converting '===' to '==' in file './in/Simpler_Cipher_Decryption.sv' on line 195, column 112.
-            4'b0111:     {PT_address, CT_address, CT_wren} <= (PT_address!== (msg_length_byte-1'b1)) ? {PT_address+8'b1, CT_address+8'b1, 1'b0} : {PT_address,CT_address, 1'b0};
-                                                                             |
-Warning : Using synthesizable equivalent of non-synthesizable operator. [VLOGPT-107]
-        : Converting '!==' to '!=' in file './in/Simpler_Cipher_Decryption.sv' on line 198, column 78.
-Warning : Replacing previously read Verilog module or VHDL entity. [HPT-76]
-        : Replacing Verilog module 'Simpler_Cipher_Decryption' in library 'default' with newly read Verilog module 'Simpler_Cipher_Decryption' in the same library in file './in/Simpler_Cipher_Decryption.sv' on line 45.
-Info    : Found unusable library cells. [LBR-415]
-        : Library: 'NanGate_15nm_OCL_worst_low_conditional_ccs.lib', Total cells: 76, Unusable cells: 9.
-	List of unusable cells: 'ANTENNA FILLTIE FILL_X1 FILL_X2 FILL_X4 FILL_X8 FILL_X16 TIEH TIEL .'
-Info    : Elaborating Design. [ELAB-1]
-        : Elaborating top-level block 'Simpler_Cipher_Decryption' from file './in/Simpler_Cipher_Decryption.sv'.
-Warning : Using default parameter value for module elaboration. [CDFG-818]
-        : Elaborating block 'RAM' with default parameters value.
 Warning : Removing unused register. [CDFG-508]
         : Removing unused flip-flop register 'accumulator' in module 'Simpler_Cipher_Decryption' in file './in/Simpler_Cipher_Decryption.sv' on line 111.
         : A flip-flop or latch that was inferred for an unused signal or variable was removed. Use 'set_attribute hdl_preserve_unused_registers true /' to preserve the flip-flop or latch.
@@ -143,8 +60,8 @@ Info    : Done Elaborating Design. [ELAB-3]
 > Reading HDL complete.
 > Runtime and memory stats:
 ===========================================
-The RUNTIME after Elaboration is 12 secs
-and the MEMORY_USAGE after Elaboration is 115.00 MB
+The RUNTIME after Elaboration is 11 secs
+and the MEMORY_USAGE after Elaboration is 114.00 MB
 ===========================================
 
 
@@ -186,7 +103,7 @@ Info    : Deleting instances not driving any primary outputs. [GLO-34]
 > Done. Runtime and memory stats:
 ===========================================
 The RUNTIME after GENERIC is 25 secs
-and the MEMORY_USAGE after GENERIC is 129.00 MB
+and the MEMORY_USAGE after GENERIC is 128.00 MB
 ===========================================
 
 
@@ -200,7 +117,7 @@ Multi-threaded Virtual Mapping (1 thread, 1 of 12 CPUs usable)
 Global mapping target info
 ==========================
 Cost Group 'clk' target slack:     6 ps
-Target path end-point (Pin: PT_data_in_reg[6]/d)
+Target path end-point (Pin: PT_data_in_reg[4]/d)
 
  
 Global mapping status
@@ -210,7 +127,7 @@ Global mapping status
                            Total  Weighted 
 Operation                   Area   Slacks  
 -------------------------------------------------------------------------------
- global_map                 9709        0 
+ global_map                 9683        0 
  
 Global incremental target info
 ==============================
@@ -225,7 +142,7 @@ Global incremental optimization status
                            Total  Weighted 
 Operation                   Area   Slacks  
 -------------------------------------------------------------------------------
- global_incr                9470        0 
+ global_incr                9483        0 
 Info    : 'Conformal LEC14.1-p100' or later builds is recommended for verification. [WDO-600]
         : The use of 'Conformal LEC14.1-p100' or later builds is recommended to get better verification results.
 Generating a dofile for design 'Simpler_Cipher_Decryption' in file 'fv/Simpler_Cipher_Decryption/rtl_to_g1.do' ...
@@ -234,8 +151,8 @@ Generating a dofile for design 'Simpler_Cipher_Decryption' in file 'fv/Simpler_C
   Synthesis succeeded.
 > Done. Runtime and memory stats:
 ===========================================
-The RUNTIME after MAPPED is 193 secs
-and the MEMORY_USAGE after MAPPED is 171.00 MB
+The RUNTIME after MAPPED is 217 secs
+and the MEMORY_USAGE after MAPPED is 172.00 MB
 ===========================================
 
 
@@ -249,8 +166,8 @@ Incremental optimization status
                            Total  Weighted      Neg      Max       Max 
 Operation                   Area   Slacks      Slack    Trans      Cap 
 -------------------------------------------------------------------------------
- init_iopt                  9470        0         0         0        0
- const_prop                 9470        0         0         0        0
+ init_iopt                  9483        0         0         0        0
+ const_prop                 9483        0         0         0        0
  
 Incremental optimization status
 ===============================
@@ -259,7 +176,7 @@ Incremental optimization status
                            Total  Weighted      Neg      Max       Max 
 Operation                   Area   Slacks      Slack    Trans      Cap 
 -------------------------------------------------------------------------------
- init_delay                 9470        0         0         0        0
+ init_delay                 9483        0         0         0        0
 
            Trick     Calls     Accepts   Attempts    Time(secs) 
 -----------------------------------------------------------
@@ -283,7 +200,7 @@ Operation                   Area   Slacks      Slack    Trans      Cap
        gcomp_tim         0  (        0 /        0 )  0.00
   inv_pair_2_buf         0  (        0 /        0 )  0.00
 
- init_drc                   9470        0         0         0        0
+ init_drc                   9483        0         0         0        0
 
            Trick     Calls     Accepts   Attempts    Time(secs) 
 -----------------------------------------------------------
@@ -324,7 +241,7 @@ Operation                   Area   Slacks      Slack    Trans      Cap
        crit_dnsz         0  (        0 /        0 )  0.00
        crit_upsz         0  (        0 /        0 )  0.00
 
- init_tns                   9470        0         0         0        0
+ init_tns                   9483        0         0         0        0
 
            Trick     Calls     Accepts   Attempts    Time(secs) 
 -----------------------------------------------------------
@@ -347,30 +264,30 @@ Operation                   Area   Slacks      Slack    Trans      Cap
         setup_dn         0  (        0 /        0 )  0.00
          buf2inv         0  (        0 /        0 )  0.00
 
- init_area                  9470        0         0         0        0
- rem_buf                    9469        0         0         0        0
- rem_inv                    9469        0         0         0        0
- merge_bi                   9468        0         0         0        0
- gate_comp                  9468        0         0         0        0
+ init_area                  9483        0         0         0        0
+ rem_buf                    9477        0         0         0        0
+ rem_inv                    9475        0         0         0        0
+ merge_bi                   9467        0         0         0        0
+ gate_comp                  9467        0         0         0        0
  glob_area                  9466        0         0         0        0
- area_down                  9460        0         0         0        0
+ area_down                  9462        0         0         0        0
 
            Trick     Calls     Accepts   Attempts    Time(secs) 
 -----------------------------------------------------------
-           undup         0  (        0 /        0 )  0.20
-         rem_buf        11  (        1 /        1 )  0.07
-         rem_inv        16  (        2 /        2 )  0.05
-        merge_bi         6  (        2 /        2 )  0.02
-      rem_inv_qb        22  (        0 /        0 )  0.01
-        io_phase        40  (        0 /        0 )  0.08
-       gate_comp         8  (        4 /        4 )  3.27
+           undup         0  (        0 /        0 )  0.17
+         rem_buf        34  (        7 /       17 )  2.43
+         rem_inv        10  (        5 /        5 )  0.10
+        merge_bi        15  (       12 /       13 )  0.67
+      rem_inv_qb        23  (        0 /        0 )  0.01
+        io_phase        38  (        0 /        0 )  0.14
+       gate_comp         9  (        3 /        3 )  3.68
        gcomp_mog         0  (        0 /        0 )  0.44
-       glob_area        25  (        3 /       25 )  0.17
-       area_down        22  (       13 /       13 )  0.69
-         rem_buf        10  (        0 /        0 )  0.07
-         rem_inv        14  (        0 /        0 )  0.04
-        merge_bi         4  (        0 /        0 )  0.02
-      rem_inv_qb        22  (        0 /        0 )  0.01
+       glob_area        25  (        1 /       25 )  0.07
+       area_down        17  (        9 /       12 )  0.93
+         rem_buf        19  (        0 /        2 )  0.29
+         rem_inv         5  (        0 /        0 )  0.11
+        merge_bi         3  (        0 /        1 )  0.09
+      rem_inv_qb        23  (        0 /        0 )  0.08
 
  
 Incremental optimization status
@@ -380,7 +297,7 @@ Incremental optimization status
                            Total  Weighted      Neg      Max       Max 
 Operation                   Area   Slacks      Slack    Trans      Cap 
 -------------------------------------------------------------------------------
- init_delay                 9460        0         0         0        0
+ init_delay                 9462        0         0         0        0
 
            Trick     Calls     Accepts   Attempts    Time(secs) 
 -----------------------------------------------------------
@@ -404,7 +321,7 @@ Operation                   Area   Slacks      Slack    Trans      Cap
        gcomp_tim         0  (        0 /        0 )  0.00
   inv_pair_2_buf         0  (        0 /        0 )  0.00
 
- init_drc                   9460        0         0         0        0
+ init_drc                   9462        0         0         0        0
 
            Trick     Calls     Accepts   Attempts    Time(secs) 
 -----------------------------------------------------------
@@ -443,21 +360,22 @@ Operation                   Area   Slacks      Slack    Trans      Cap
        crit_dnsz         0  (        0 /        0 )  0.00
        crit_upsz         0  (        0 /        0 )  0.00
 
- init_area                  9460        0         0         0        0
- glob_area                  9460        0         0         0        0
+ init_area                  9462        0         0         0        0
+ undup                      9461        0         0         0        0
+ area_down                  9461        0         0         0        0
 
            Trick     Calls     Accepts   Attempts    Time(secs) 
 -----------------------------------------------------------
-           undup         0  (        0 /        0 )  0.18
-         rem_buf        10  (        0 /        0 )  0.02
-         rem_inv        14  (        0 /        0 )  0.04
-        merge_bi         4  (        0 /        0 )  0.02
-      rem_inv_qb        22  (        0 /        0 )  0.01
-        io_phase        40  (        0 /        0 )  0.08
-       gate_comp         3  (        0 /        0 )  3.36
-       gcomp_mog         0  (        0 /        0 )  0.42
-       glob_area        25  (        1 /       25 )  0.07
-       area_down        16  (        0 /        0 )  0.11
+           undup         1  (        1 /        1 )  0.18
+         rem_buf        19  (        0 /        2 )  0.36
+         rem_inv         5  (        0 /        0 )  0.11
+        merge_bi         3  (        0 /        1 )  0.09
+      rem_inv_qb        23  (        0 /        0 )  0.07
+        io_phase        38  (        0 /        0 )  0.13
+       gate_comp         6  (        0 /        0 )  3.73
+       gcomp_mog         0  (        0 /        0 )  0.53
+       glob_area        25  (        0 /       25 )  0.10
+       area_down        15  (        1 /        3 )  0.75
 
 
   Done mapping Simpler_Cipher_Decryption
@@ -474,8 +392,8 @@ Error   : Cannot proceed with tiecell insertion. [UTUI-216] [insert_tiehilo_cell
         : Fix the problems reported above.
 > Done. Runtime and memory stats:
 ===========================================
-The RUNTIME after INCREMENTAL is 211 secs
-and the MEMORY_USAGE after INCREMENTAL is 167.00 MB
+The RUNTIME after INCREMENTAL is 242 secs
+and the MEMORY_USAGE after INCREMENTAL is 169.00 MB
 ===========================================
 
 
@@ -500,12 +418,11 @@ Warning : Default value for an option has changed in this release. [WSDF-104]
         : Default value for -recrem has changed from split to merge_always. Specify '-recrem split' to preserve the behavior of the previous release.
 > Synthesize complete. Final runtime and memory:
 ===========================================
-The RUNTIME after FINAL is 230 secs
-and the MEMORY_USAGE after FINAL is 192.00 MB
+The RUNTIME after FINAL is 263 secs
+and the MEMORY_USAGE after FINAL is 193.00 MB
 ===========================================
 
 
 > Exiting . . .
 Normal exit.
-
 
