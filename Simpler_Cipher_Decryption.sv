@@ -196,8 +196,8 @@ module Simpler_Cipher_Decryption (
             `Halt:           {halt, PT_wren, CT_wren,accumulator} <= {1'b1, 2'b0, 4'b0};
             `End:            {done, halt, PT_wren, CT_wren, key} <= (Encode_reg )? {1'b1, 3'b0, encode_key_shift}: {1'b1, 3'b0, (5'd26-(key_decode-1'b1))};
             
-            default:       {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, halt, done} 
-                                <= {5'b0, 16'b0, 16'b0, 2'b0, 2'b0};
+            default:       {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, halt, done, accumulator} 
+                                <= {5'b0, 16'b0, 16'b0, 2'b0, 2'b0, 4'b0};
         endcase 
     end
 
