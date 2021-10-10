@@ -21,7 +21,7 @@ set_attribute lib_search_path /ubc/ece/data/cmc2/kits/ncsu_pdk/FreePDK15/NanGate
 set_attribute library {NanGate_15nm_OCL_worst_low_conditional_ccs.lib}
 
 # Read in user Verilog files (add -sv flag for SystemVerilog files)
-read_hdl -sv ./in/RAM_TEST.sv
+read_hdl -sv ./in/RAM.sv
 read_hdl -sv ./in/Simpler_Cipher_Decryption.sv
 
 # Elaboration validates the syntax (elaborate top-level model)
