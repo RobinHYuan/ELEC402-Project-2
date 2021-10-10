@@ -47,7 +47,7 @@ initial begin
 
     repeat(23) begin
         next = 1; #15; next = 0; 
-        #2000;
+        #3000;
     end 
     repeat(2) #15 okay = ! okay;
 

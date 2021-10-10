@@ -74,6 +74,14 @@ module Simpler_Cipher_Decryption (
     assign  Upper_Overflow_flag = Encode_reg ? (((PT_q_out + encode_key_shift) >8'h5A) ? 1:0) : (((CT_q_out + key_decode) >8'h5A) ? 1:0);
     assign  Lower_Overflow_flag = Encode_reg ? (((PT_q_out + encode_key_shift) >8'h7A) ? 1:0) : (((CT_q_out + key_decode) >8'h7A) ? 1:0);
 
+
+    logic [7:0] CT_Next, PT_Next;
+    assign CT_Next =  (PT_q_out >8'h40 && PT_q_out <8'h5B) ? {(PT_q_out + input_key_reg) %8'h5b + Upper_Overflow_flag *8'h41}  : 
+                     ((PT_q_out >8'h60 && PT_q_out <8'h7b) ? {(PT_q_out + input_key_reg) %8'h7b + Lower_Overflow_flag* 8'h61}  : {PT_q_out} );
+
+    assign PT_Next =  (CT_q_out >8'h40 && CT_q_out <8'h5B) ? {(CT_q_out + key_decode) %8'h5b + Upper_Overflow_flag *8'h41}  : 
+                     ((CT_q_out >8'h60 && CT_q_out <8'h7b) ? { (CT_q_out + key_decode) %8'h7b + Lower_Overflow_flag* 8'h61} : { CT_q_out} );
+
     //Memorry Module Instantiations
     RAM CT (CT_address, clk, CT_data_in, CT_wren, CT_q_out, ct_mem);
     RAM  PT (PT_address, clk, PT_data_in, PT_wren, PT_q_out, pt_mem);
@@ -176,12 +184,10 @@ module Simpler_Cipher_Decryption (
             
             `Wait:           {CT_address, CT_data_in, CT_wren, PT_address, PT_data_in, PT_wren} <= {CT_address, CT_data_in, CT_wren, PT_address, PT_data_in, PT_wren};
 
-            `PT_Write:       {PT_address, PT_data_in, PT_wren} <= (CT_q_out >8'h40 && CT_q_out <8'h5B) ? {PT_address, (CT_q_out + key_decode) %8'h5b + Upper_Overflow_flag *8'h41, 1'b1}  : 
-                                                                  ((CT_q_out >8'h60 && CT_q_out <8'h7b) ? {PT_address, (CT_q_out + key_decode) %8'h7b + Lower_Overflow_flag* 8'h61, 1'b1} : {PT_address, CT_q_out, 1'b1});
-            
-            `CT_Write:      {CT_address, CT_data_in, CT_wren} <= (PT_q_out >8'h40 && PT_q_out <8'h5B) ? {CT_address, (PT_q_out + input_key_reg) %8'h5b + Upper_Overflow_flag *8'h41, 1'b1}  : 
-                                                                  ((PT_q_out >8'h60 && PT_q_out <8'h7b) ? {CT_address, (PT_q_out + input_key_reg) %8'h7b + Lower_Overflow_flag* 8'h61, 1'b1} : {CT_address, PT_q_out, 1'b1});
-
+            `PT_Write:       {PT_address, PT_data_in, PT_wren} <=  {PT_address, PT_Next, 1'b1};
+    
+            `CT_Write:      {CT_address, CT_data_in, CT_wren} <=  {CT_address, CT_Next, 1'b1};  
+                                            
             `Decode_Inc:     {CT_address, PT_address, key_decode, PT_wren} <= (ROT_13_reg && (CT_address !== msg_length_byte-1'b1)) ? {CT_address+8'b1, PT_address+8'b1, key_decode, 1'b0} : 
                                                                                                    (CT_address === msg_length_byte-1'b1  ) ? {9'b0, 9'b0, key_decode + 5'b1, 1'b0}:
                                                                                                    {CT_address+8'b1, PT_address+8'b1, key_decode, 1'b0};
