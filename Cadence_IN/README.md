@@ -1,0 +1,1 @@
+This folder contains the required input files for synthesizing the design using cadence
