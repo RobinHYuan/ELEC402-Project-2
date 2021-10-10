@@ -87,7 +87,7 @@ module Simpler_Cipher_Decryption (
     RAM  PT (PT_address, clk, PT_data_in, PT_wren, PT_q_out, pt_mem);
 
     //Internal helper signals
-    logic [3:0] state;
+    logic [3:0] state, accumulator;
     
     // State Macros  
     `define Reset           4'b0000  
@@ -107,8 +107,8 @@ module Simpler_Cipher_Decryption (
 // Finite State Machine 
     always_ff @( posedge clk ) begin 
         if (reset == 1) // Synchronous Reset; Set Important SIgnals to a known value
-            {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, state, halt, done,ROT_13_reg, Encode_reg, input_key_reg} 
-                <= {5'b0, 16'b0, 16'b0, 2'b0, `Reset, 2'b0, 2'b0, 5'b0};
+            {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, state, halt, done,ROT_13_reg, Encode_reg, input_key_reg, accumulator} 
+                <= {5'b0, 16'b0, 16'b0, 2'b0, `Reset, 2'b0, 2'b0, 5'b0, 4'b0};
         else 
             casex (state) // State Transition
                  `Reset:        state <= `Select_Mode;
@@ -116,7 +116,7 @@ module Simpler_Cipher_Decryption (
                   4'b10x1:      state <= `Mem_Read; //4'b10x1 includes ROT_13 and Encode states
                  `Mem_Read:     state <= `Mem_Wait;
                  `Mem_Wait:     state <= `Wait;
-                 `Wait:         state <= (Encode_reg) ? `CT_Write: `PT_Write;
+                 `Wait:         state <= (accumulator > 4'd5) ? ((Encode_reg) ? `CT_Write: `PT_Write) : `Wait ;
                  `PT_Write:     state <= `Decode_Inc;
                  `CT_Write:     state <= `Encode_Inc;
                   4'b01x1  :    state <= (CT_address === msg_length_byte -1'b1) ? `Halt: `Mem_Read;//4'b01x1 include Decode_Inc and Encode_Inc
@@ -182,7 +182,7 @@ module Simpler_Cipher_Decryption (
 
              4'b001x:       {CT_address, CT_data_in, CT_wren, PT_address, PT_data_in, PT_wren} <= {CT_address, 8'b0, 1'b0, PT_address, 8'b0, 1'b0} ; //includes mem_read and mem_Write
             
-            `Wait:           {CT_address, CT_data_in, CT_wren, PT_address, PT_data_in, PT_wren} <= {CT_address, CT_data_in, CT_wren, PT_address, PT_data_in, PT_wren};
+            `Wait:           {CT_address, CT_data_in, CT_wren, PT_address, PT_data_in, PT_wren, accumulator} <= {CT_address, CT_data_in, CT_wren, PT_address, PT_data_in, PT_wren, accumulator + 4'b1};
 
             `PT_Write:       {PT_address, PT_data_in, PT_wren} <=  {PT_address, PT_Next, 1'b1};
     
@@ -193,7 +193,7 @@ module Simpler_Cipher_Decryption (
                                                                                                    {CT_address+8'b1, PT_address+8'b1, key_decode, 1'b0};
 
             `Encode_Inc:     {PT_address, CT_address, CT_wren} <= (PT_address!== (msg_length_byte-1'b1)) ? {PT_address+8'b1, CT_address+8'b1, 1'b0} : {PT_address,CT_address, 1'b0};
-            `Halt:           {halt, PT_wren, CT_wren} <= {1'b1, 2'b0};
+            `Halt:           {halt, PT_wren, CT_wren,accumulator} <= {1'b1, 2'b0, 4'b0};
             `End:            {done, halt, PT_wren, CT_wren, key} <= (Encode_reg )? {1'b1, 3'b0, encode_key_shift}: {1'b1, 3'b0, (5'd26-(key_decode-1'b1))};
             
             default:       {key_decode, CT_address, PT_address, CT_data_in, PT_data_in, CT_wren, PT_wren, halt, done} 
