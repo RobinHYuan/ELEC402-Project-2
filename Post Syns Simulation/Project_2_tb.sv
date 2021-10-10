@@ -4,7 +4,7 @@ DATE: SEPY, 2021
 AUTHOR: ROBIN YUAN
 */
 
-`timescale 1 ps / 1 ps
+`timescale 20 ps / 1 ps
 module tb_Simpler_Cipher_Decryption();
 
 logic clk, reset;
