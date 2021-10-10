@@ -1,7 +1,6 @@
 module RAM(reset, address, clock,data,wren,q, mem_in, mem_out);
   parameter data_width = 8; 
   parameter addr_width = 8;
-  //parameter filename = "data.txt";
 
   input reset;
   input clock;
@@ -9,10 +8,8 @@ module RAM(reset, address, clock,data,wren,q, mem_in, mem_out);
   input wren;
   input [data_width-1:0] data;
   output logic [data_width-1:0] q;
-  input logic [data_width-1:0] mem_in [0: 2**addr_width-1];
+  input  logic [data_width-1:0] mem_in  [0: 2**addr_width-1];
   output logic [data_width-1:0] mem_out [0: 2**addr_width-1];
-
-
 
   always @ (posedge clock) begin
     if (reset) mem_out[0: 2**addr_width-1] = mem_in[0: 2**addr_width-1];
