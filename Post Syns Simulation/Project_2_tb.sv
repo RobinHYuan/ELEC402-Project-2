@@ -306,7 +306,7 @@ Simpler_Cipher_Decryption tb( clk, reset, next, okay, mode, msg_length_byte, enc
      ct_mem[13] , ct_mem[12] , ct_mem[11] , ct_mem[10] , ct_mem[9]
      , ct_mem[8] , ct_mem[7] , ct_mem[6] , ct_mem[5] , ct_mem[4] ,
      ct_mem[3] , ct_mem[2] , ct_mem[1] , ct_mem[0] ) ;
-initial forever #1 clk = ! clk;
+initial begin forever #1 clk = ! clk; end
 /*
 THE TESTBECH IS VERY INTUITIVE WHERE THREE SEPARETE TESTS ARE INCLUDED.
 THEY ARE USED TO TEST OUT THE CASESAR CIPHER DECRYPTION, ENCRYPTION 
@@ -340,7 +340,7 @@ initial begin
     #2500;
     $readmemh("blank.memh", ct_mem_in);
     $readmemh("blank.memh", pt_mem_in);
-    #100;$readmemh("The quick brown fox jumps over the lazy dog_original.memh", ct_mem_in);    
+    #100;$readmemh("The quick brown fox jumps over the lazy dog_original.memh", pt_mem_in);    
    repeat (2) #15 reset = ! reset; msg_length_byte = 43;
     encode_key_shift = 3; #15 mode = 3;
     repeat(2) #15 okay = ! okay;
